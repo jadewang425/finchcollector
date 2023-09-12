@@ -2,14 +2,14 @@
 {% block content %}
     <h1>All Finches</h1>
     {% for finch in finches %}
-
-        <div class="card">
-            <div class="card-content">
-                <span class="card-title">{{ finch.breed }}</span>
-                <p>Description: {{ finch.description }}</p>
-                <p>Origin: {{ finch.origin }}</p>
+        <a href="{% url 'detail' finch.id %}"></a>
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">{{ finch.breed }}</span>
+                    <p>Origin: {{ finch.origin }}</p>
+                    <p>Description: {{ finch.description|linebreaks }}</p>
+                </div>
             </div>
-        </div>
-
+        </a>
     {% endfor %}
 {% endblock %}
