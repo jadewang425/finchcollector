@@ -8,5 +8,9 @@
                 <p><strong>Origin:</strong> {{ finch.origin }}</p>
                 <p><strong>Description:</strong> {{ finch.description|linebreaks }}</p>
             </div>
+            <div class="card-action">
+                <a href="{% url 'finch_update' finch.id %}" class="btn">Edit</a>
+                <a href="{% url 'finch_delete' finch.id %}" class="btn red">Delete</a>
+            </div>
         </div>
 {% endblock %}
