@@ -67,6 +67,9 @@ class ToyCreate(CreateView):
     model = Toy
     fields = ['name', 'color']
 
+    def form_valid(self, form):
+        return super().form_valid(form)
+
 class ToyUpdate(UpdateView):
     model = Toy
     fields = ['name', 'color']
