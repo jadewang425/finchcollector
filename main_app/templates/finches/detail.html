@@ -2,50 +2,97 @@
 
 {% block content %}
     <h1>Finch Details</h1>
-        <div class="row"></div>
-            <div class="col s6">
-                <div class="card">
-                    <div class="card-content">
-                        <span class="card-title">{{ finch.breed }}</span>
-                        <p><strong>Origin:</strong> {{ finch.origin }}</p>
-                        <p><strong>Description:</strong> {{ finch.description|linebreaks }}</p>
-                    </div>
-                    <div class="card-action">
-                        <a href="{% url 'finch_update' finch.id %}" class="btn">Edit</a>
-                        <a href="{% url 'finch_delete' finch.id %}" class="btn red">Delete</a>
-                    </div>
+    <div class="row">
+        <div class="col s6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">{{ finch.breed }}</span>
+                    <p><strong>Origin:</strong> {{ finch.origin }}</p>
+                    <p><strong>Description:</strong> {{ finch.description|linebreaks }}</p>
+                </div>
+                <div class="card-action">
+                    <a href="{% url 'finch_update' finch.id %}" class="btn">Edit</a>
+                    <a href="{% url 'finch_delete' finch.id %}" class="btn red">Delete</a>
                 </div>
             </div>
-            <div class="col s6">
-                <form action="{% url 'add_feeding' finch.id %}" method="POST">
-                    {% csrf_token %}
-                    {{ feeding_form.as_p }}
-                    <input type="submit" class="btn" value="Add Feeding">
-                </form>
-                <br>
-                {% if finch.fed_for_today %}
-                    <div class="card-panel teal-text center-align">{{finch.breed}} has been fed for today!</div>
-                    {% else %}
-                    <div class="card-panel red-text center-align">{{finch.breed}} might be hangry.</div>
-                {% endif %}
-                <table class="striped">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Meal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for feeding in finch.feeding_set.all %}
-                            <tr>
-                                <td>{{feeding.date}}</td>
-                                <td>{{feeding.get_meal_display}}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
         </div>
+        <div class="col s6">
+            <form action="{% url 'add_feeding' finch.id %}" method="POST">
+                {% csrf_token %}
+                {{ feeding_form.as_p }}
+                <input type="submit" class="btn" value="Add Feeding">
+            </form>
+            <br>
+            {% if finch.fed_for_today %}
+                <div class="card-panel teal-text center-align">{{finch.breed}} has been fed for today!</div>
+                {% else %}
+                <div class="card-panel red-text center-align">{{finch.breed}} might be hangry.</div>
+            {% endif %}
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Meal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for feeding in finch.feeding_set.all %}
+                        <tr>
+                            <td>{{feeding.date}}</td>
+                            <td>{{feeding.get_meal_display}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col s6">
+            <h3>{{ finch.breed }}'s Toys</h3>
+            {% if finch.toys.count %}
+                {% for toy in finch.toys.all %}
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">
+                                A <span style="color: {{ toy.color }}">{{ toy.color }}</span> {{ toy.name }}
+                            </span>
+                        </div>
+                        <div class="card-action">
+                            <form action="{% url 'unassoc_toy' finch.id toy.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn red">x</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                    <h5 class="red-text">Get {{ finch.breed }} some toys!</h5>
+            {% endif %}
+        </div>
+        <div class="col s6">
+            <h3>Available Toys</h3>
+            {% if toys.count %}
+                {% for toy in toys.all %}
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">
+                                A <span style="color: {{ toy.color }}">{{ toy.color }}</span> {{ toy.name }}
+                            </span>
+                        </div>
+                        <div class="card-action">
+                            <form action="{% url 'assoc_toy' finch.id toy.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn">+</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h5>{{ finch.breed }} has every toys.</h5>
+            {% endif %}
+        </div>
+    </div>
     <script>
         const dateEl = document.getElementById('id_date');
         // M is Materialize's global variable

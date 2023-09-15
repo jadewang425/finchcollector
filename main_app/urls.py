@@ -21,7 +21,9 @@ urlpatterns = [
     path('toys/<int:toy_id>/update', views.ToyUpdate.as_view(), name='toys_update'),
     # delete
     path('toys/<int:toy_id>/delete', views.ToyDelete.as_view(), name='toys_delete'),
-
-
-
+    
+    # associate a toy with the cat on the cat detail page
+    path('finches/<int:finch_id>/assoc_toy/<int:toy_id>/', views.assoc_toy, name='assoc_toy'),
+    # unassociate a toy on the cat detail page
+    path('finches/<int:finch_id>/unassoc_toy/<int:toy_id>/', views.unassoc_toy, name='unassoc_toy'),
 ]
